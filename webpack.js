@@ -12,16 +12,16 @@ webpack(
         resolve: { // Extend module resolutions to include more file types
             extensions: ['', '.webpack.js', '.web.js', '.ts', '.js']
         },
+        externals: {
+            "quark-native": "quark-native" // Use this because Quark exposes QK objects to `quark-native` object
+        },
         plugins: [ // Minify the JS code
             // new webpack.optimize.UglifyJsPlugin()
-            // new webpack.ProvidePlugin({
-            //     quark: "quark"
-            // })
         ],
         module: { // Use a module to load TypeScript
             loaders: [
                 { test: /\.ts$/, loader: 'ts-loader' }, // Load TS files with ts-loader
-                { test: require.resolve("quark"), loader: "expose-loader?quark" } // Export quark with expose-loader
+                { test: require.resolve("quark"), loader: "expose-loader?quark" }, // Export quark with expose-loader
             ]
         }
     }, function(err, stats) {
@@ -30,9 +30,9 @@ webpack(
         if (err) {
             console.log(prefix + "Error:", error);
         } else if (stats.hasErrors()) {
-            console.log(prefix + "Stats errors:", stats.errors);
+            console.log(prefix + "Stats errors:", stats.compilation.errors);
         } else if (stats.hasWarnings()) {
-            console.log(prefix + "Stats warnings:", stats.warnings);
+            console.log(prefix + "Stats warnings:", stats.compilation.errors);
         } else {
             console.log(prefix + "Compile complete.")
         }

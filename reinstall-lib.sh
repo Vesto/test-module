@@ -1,4 +1,3 @@
 #!/bin/bash
 
-npm unintall quark
-npm install quark
+npm install ../quark-library
