@@ -1,39 +1,40 @@
 var webpack = require("webpack");
 
-// webpack(
-//     {
-//         // entry: ["./dist/index.js", "./dist/force_exports.js"], // Load force exports to export quark to the module too
-//         entry: {
-//             app: "./dist/Delegate.js"
-//         },
-//         output: {
-//             filename: "build2.js",
-//             libraryTarget: "umd",
-//             library: "test_module"
-//         },
-//         externals: {
-//             "quark": "quark"
-//         }
-//     }, function() {
-//
-//     }
-// );
-
 webpack(
     {
-        entry: {
-            app: "./dist/Delegate.js", // Need to be configured
-            vendor: ["quark"]
-        },
-        output: {
-            filename: "build.js",
+        entry: './src/Delegate.ts',
+        output: { // Output to a bundle using UMD
             libraryTarget: "umd",
-            library: "test_module" // Need to be configured
+            library: "app",
+            filename: 'bundle.js'
         },
-        externals: {
-
+        devtool: 'source-map', // Generate sourcemaps
+        resolve: { // Extend module resolutions to include more file types
+            extensions: ['', '.webpack.js', '.web.js', '.ts', '.js']
+        },
+        plugins: [ // Minify the JS code
+            // new webpack.optimize.UglifyJsPlugin()
+            // new webpack.ProvidePlugin({
+            //     quark: "quark"
+            // })
+        ],
+        module: { // Use a module to load TypeScript
+            loaders: [
+                { test: /\.ts$/, loader: 'ts-loader' }, // Load TS files with ts-loader
+                { test: require.resolve("quark"), loader: "expose-loader?quark" } // Export quark with expose-loader
+            ]
         }
-    }, function() {
-        console.log("Complete.");
+    }, function(err, stats) {
+        var date = new Date();
+        var prefix = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + " ";
+        if (err) {
+            console.log(prefix + "Error:", error);
+        } else if (stats.hasErrors()) {
+            console.log(prefix + "Stats errors:", stats.errors);
+        } else if (stats.hasWarnings()) {
+            console.log(prefix + "Stats warnings:", stats.warnings);
+        } else {
+            console.log(prefix + "Compile complete.")
+        }
     }
 );

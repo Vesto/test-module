@@ -1,8 +1,8 @@
 {
     "name": "Test Module",
     "version": "0.0.1",
-    "module": "test_module",
+    "module": "app",
     "delegate": "Delegate",
-    "build": "build.js",
+    "build": "bundle.js",
     "resources": "resources/"
 }
