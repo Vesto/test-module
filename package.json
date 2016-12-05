@@ -10,7 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "expose-loader": "^0.7.1",
-    "quark": "file:../quark-library",
     "ts-loader": "^1.2.2",
     "typescript": "^2.0.10",
     "webpack": "^1.13.3"

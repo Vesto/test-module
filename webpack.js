@@ -1,6 +1,6 @@
 var webpack = require("webpack");
 
-webpack(
+var compiler = webpack(
     {
         entry: './src/Delegate.ts',
         output: { // Output to a bundle using UMD
@@ -24,17 +24,20 @@ webpack(
                 { test: require.resolve("quark"), loader: "expose-loader?quark" }, // Export quark with expose-loader
             ]
         }
-    }, function(err, stats) {
-        var date = new Date();
-        var prefix = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + " ";
-        if (err) {
-            console.log(prefix + "Error:", error);
-        } else if (stats.hasErrors()) {
-            console.log(prefix + "Stats errors:", stats.compilation.errors);
-        } else if (stats.hasWarnings()) {
-            console.log(prefix + "Stats warnings:", stats.compilation.errors);
-        } else {
-            console.log(prefix + "Compile complete.")
-        }
     }
 );
+
+new webpack.Compiler.Watching(compiler, undefined, function(err, stats) {
+    var date = new Date();
+    var prefix = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + " ";
+    if (err) {
+        console.log(prefix + "Error:", error);
+    } else if (stats.hasErrors()) {
+        console.log(prefix + "Stats errors:", stats.compilation.errors);
+    } else if (stats.hasWarnings()) {
+        console.log(prefix + "Stats warnings:", stats.compilation.errors);
+    } else {
+        console.log(prefix + "Compile complete.")
+    }
+});
+

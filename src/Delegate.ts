@@ -1,4 +1,4 @@
-import { View, ModuleDelegate, ToolbarItem, Action, Window } from "quark";
+import { View, ModuleDelegate, ToolbarItem, Action, Window, Logger } from "quark";
 import { RootView } from "./RootView";
 
 export class Delegate implements ModuleDelegate {
