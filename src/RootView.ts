@@ -11,12 +11,15 @@ export class RootView extends View {
         this.view2 = new View();
         this.view1.backgroundColor = new Color(1, 0, 1, 1);
         this.view2.backgroundColor = new Color(0, 1, 0, 1);
+        this.view1.name = "View 1";
+        this.view2.name = "View 1";
         this.addSubview(this.view1);
         this.addSubview(this.view2);
 
+        this.name = "Root view";
         this.backgroundColor = new Color(1, 1, 0, 1);
 
-        Logger.print(`internal view ${(<any>this).view} ${(<any>this).view.jsView}`)
+        Logger.print(`Root view:\nSubviews: ${this.subviews}`)
     }
 
     layout() {
