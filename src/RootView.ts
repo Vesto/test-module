@@ -1,8 +1,9 @@
-import { View, Color, Rect, Logger } from "quark";
+import { View, Color, Rect, Logger, Button, Point } from "quark";
 
 export class RootView extends View {
     private view1: View;
     private view2: View;
+    private button: Button
 
     public constructor() {
         super();
@@ -16,6 +17,10 @@ export class RootView extends View {
         this.addSubview(this.view1);
         this.addSubview(this.view2);
 
+        this.button = new Button();
+        this.button.rect = new Rect(0, 0, 100, 100);
+        this.addSubview(this.button);
+
         this.name = "Root view";
         this.backgroundColor = new Color(1, 1, 0, 1);
 
@@ -25,7 +30,7 @@ export class RootView extends View {
     layout() {
         super.layout();
 
-        Logger.print("Did layout");
+        // Logger.print("Did layout");
 
         let p = 10; // Padding
         this.view1.rect = new Rect(
@@ -37,6 +42,6 @@ export class RootView extends View {
             this.rect.size.width / 2 - p * 2, this.rect.size.height - p * 2
         );
 
-
+        this.button.center = new Point(this.rect.width / 2, this.rect.height / 2);
     }
 }
