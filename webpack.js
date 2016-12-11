@@ -1,6 +1,6 @@
 var webpack = require("webpack");
 
-var compiler = webpack(
+var compiler = webpack( // TODO: Somehow force include `quark`. It doesn't include it at all if not used.
     {
         entry: './src/Delegate.ts',
         output: { // Output to a bundle using UMD

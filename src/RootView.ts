@@ -1,9 +1,10 @@
-import { View, Color, Rect, Logger, Button, Point } from "quark";
+import { View, Color, Rect, Logger, Button, Point, KeyEvent } from "quark";
 
 export class RootView extends View {
+
     private view1: View;
     private view2: View;
-    private button: Button
+    private button: Button;
 
     public constructor() {
         super();
@@ -13,7 +14,7 @@ export class RootView extends View {
         this.view1.backgroundColor = new Color(1, 0, 1, 1);
         this.view2.backgroundColor = new Color(0, 1, 0, 1);
         this.view1.name = "View 1";
-        this.view2.name = "View 1";
+        this.view2.name = "View 2";
         this.addSubview(this.view1);
         this.addSubview(this.view2);
 
@@ -23,8 +24,6 @@ export class RootView extends View {
 
         this.name = "Root view";
         this.backgroundColor = new Color(1, 1, 0, 1);
-
-        Logger.print(`Root view:\nSubviews: ${this.subviews}`)
     }
 
     layout() {
@@ -43,5 +42,15 @@ export class RootView extends View {
         );
 
         this.button.center = new Point(this.rect.width / 2, this.rect.height / 2);
+    }
+
+
+    keyEvent(event: KeyEvent): boolean {
+        if (event.keyCode == 3) {
+            Logger.print("F'ed");
+            return true; // Absorb the 'f' key
+        } else {
+            return super.keyEvent(event); // Let the superview handle it
+        }
     }
 }
