@@ -1,12 +1,15 @@
 import { View, Color, Rect, Logger, Button, Point, KeyEvent } from "quark";
 import { DraggableView } from "./DraggableView";
+import { DrawingView } from "./DrawingView";
 
 export class RootView extends View {
 
     private view1: View;
     private view2: View;
     private button: Button;
-    private draggable: DraggableView;
+    private draggable1: DraggableView;
+    private draggable2: DraggableView;
+    private drawingView: DrawingView;
 
     public constructor() {
         super();
@@ -28,11 +31,21 @@ export class RootView extends View {
         this.button.buttonDownHandler = (button) => Logger.print(`Button down ${button}`);
         this.button.buttonUpHandler = (button) => Logger.print(`Button up ${button}`);
 
-        // Create the draggable
-        this.draggable = new DraggableView();
-        this.draggable.rect = new Rect(0, 0, 100, 100);
-        this.draggable.backgroundColor = new Color(0.17, 0.53, 0.77, 1.00);
-        this.addSubview(this.draggable);
+        // Create the draggabls
+        this.draggable1 = new DraggableView();
+        this.draggable1.rect = new Rect(0, 0, 100, 100);
+        this.draggable1.backgroundColor = new Color(0.17, 0.53, 0.77, 1.00);
+        this.addSubview(this.draggable1);
+
+        this.draggable2 = new DraggableView();
+        this.draggable2.rect = new Rect(100, 0, 100, 100);
+        this.draggable2.backgroundColor = new Color(0.99, 0.25, 0.39, 1.00);
+        this.addSubview(this.draggable2);
+
+        // Make drawing
+        this.drawingView = new DrawingView();
+        this.drawingView.rect = new Rect(10, 10, 500, 500);
+        this.addSubview(this.drawingView)
 
         // Configure this view
         this.name = "Root view";
