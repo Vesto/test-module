@@ -1,32 +1,42 @@
-import { View, Color, Rect, Logger, Button, Point, KeyEvent, InteractionEvent } from "quark";
+import { View, Color, Rect, Logger, Button, Point, KeyEvent } from "quark";
+import { DraggableView } from "./DraggableView";
 
 export class RootView extends View {
 
     private view1: View;
     private view2: View;
     private button: Button;
+    private draggable: DraggableView;
 
     public constructor() {
         super();
 
+        // Create some views
         this.view1 = new View();
         this.view2 = new View();
-        this.view1.backgroundColor = new Color(1, 0, 1, 1);
-        this.view2.backgroundColor = new Color(0, 1, 0, 1);
+        this.view1.backgroundColor = new Color(0.99, 0.69, 0.16, 1.00);
+        this.view2.backgroundColor = new Color(0.42, 0.94, 0.38, 1.00);
         this.view1.name = "View 1";
         this.view2.name = "View 2";
         this.addSubview(this.view1);
         this.addSubview(this.view2);
 
+        // Create the button
         this.button = new Button();
         this.button.rect = new Rect(0, 0, 100, 100);
         this.addSubview(this.button);
+        this.button.buttonDownHandler = (button) => Logger.print(`Button down ${button}`);
+        this.button.buttonUpHandler = (button) => Logger.print(`Button up ${button}`);
 
-        this.button.buttonDownHandler = (button) => Logger.print(`Button down ${button}`)
-        this.button.buttonUpHandler = (button) => Logger.print(`Button up ${button}`)
+        // Create the draggable
+        this.draggable = new DraggableView();
+        this.draggable.rect = new Rect(0, 0, 100, 100);
+        this.draggable.backgroundColor = new Color(0.17, 0.53, 0.77, 1.00);
+        this.addSubview(this.draggable);
 
+        // Configure this view
         this.name = "Root view";
-        this.backgroundColor = new Color(1, 1, 0, 1);
+        this.backgroundColor = new Color(0.93, 0.93, 0.93, 1.00);
     }
 
     layout() {
