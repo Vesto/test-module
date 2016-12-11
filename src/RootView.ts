@@ -31,7 +31,7 @@ export class RootView extends View {
         this.button.buttonDownHandler = (button) => Logger.print(`Button down ${button}`);
         this.button.buttonUpHandler = (button) => Logger.print(`Button up ${button}`);
 
-        // Create the draggabls
+        // Create the draggables
         this.draggable1 = new DraggableView();
         this.draggable1.rect = new Rect(0, 0, 100, 100);
         this.draggable1.backgroundColor = new Color(0.17, 0.53, 0.77, 1.00);
@@ -40,12 +40,12 @@ export class RootView extends View {
         this.draggable2 = new DraggableView();
         this.draggable2.rect = new Rect(100, 0, 100, 100);
         this.draggable2.backgroundColor = new Color(0.99, 0.25, 0.39, 1.00);
-        this.addSubview(this.draggable2);
+        this.addSubviewAt(this.draggable2, this.subviews.length - 2);
 
         // Make drawing
         this.drawingView = new DrawingView();
         this.drawingView.rect = new Rect(10, 10, 500, 500);
-        this.addSubview(this.drawingView)
+        this.addSubview(this.drawingView);
 
         // Configure this view
         this.name = "Root view";

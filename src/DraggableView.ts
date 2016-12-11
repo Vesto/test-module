@@ -27,7 +27,7 @@ export class DraggableView extends View {
         this.rect = new Rect(
             this.rect.x + delta.x, this.rect.y + delta.y,
             this.rect.width, this.rect.height
-        )
+        );
 
         // Save the previous position
         this.previousLocation = location;
