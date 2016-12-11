@@ -1,4 +1,4 @@
-import { View, Color, Rect, Logger, Button, Point, KeyEvent } from "quark";
+import { View, Color, Rect, Logger, Button, Point, KeyEvent, InteractionEvent } from "quark";
 
 export class RootView extends View {
 
@@ -22,6 +22,9 @@ export class RootView extends View {
         this.button.rect = new Rect(0, 0, 100, 100);
         this.addSubview(this.button);
 
+        this.button.buttonDownHandler = (button) => Logger.print(`Button down ${button}`)
+        this.button.buttonUpHandler = (button) => Logger.print(`Button up ${button}`)
+
         this.name = "Root view";
         this.backgroundColor = new Color(1, 1, 0, 1);
     }
@@ -43,7 +46,6 @@ export class RootView extends View {
 
         this.button.center = new Point(this.rect.width / 2, this.rect.height / 2);
     }
-
 
     keyEvent(event: KeyEvent): boolean {
         if (event.keyCode == 3) {
