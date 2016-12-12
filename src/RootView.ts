@@ -44,8 +44,8 @@ export class RootView extends View {
 
         // Make drawing
         this.drawingView = new DrawingView();
-        this.drawingView.rect = new Rect(10, 10, 500, 500);
-        this.addSubview(this.drawingView);
+        this.drawingView.rect = new Rect(10, 10, 100, 100);
+        this.view2.addSubview(this.drawingView);
 
         // Configure this view
         this.name = "Root view";

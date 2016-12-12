@@ -1,4 +1,5 @@
-import { View, InteractionEvent, Color, InteractionType, Point, Rect } from "quark";
+import { View, InteractionEvent, Color, InteractionType, Point, Rect, Module, Logger, } from "quark";
+import { Delegate } from "./Delegate";
 
 export class DrawingView extends View {
     constructor() {
@@ -17,7 +18,7 @@ export class DrawingView extends View {
     }
 
     private drawAt(location: Point) {
-        let newLocation = location.subtract(this.rect.point); // Need to add converting points between views
+        let newLocation = Delegate.window.rootView.convertPointTo(this, location);
         let v = new View();
         // noinspection JSSuspiciousNameCombination
         v.rect = new Rect(Math.floor(newLocation.x), Math.floor(newLocation.y), 1, 1);
