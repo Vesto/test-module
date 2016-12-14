@@ -1,4 +1,4 @@
-import { View, Color, Rect, Logger, Button, Point, KeyEvent } from "quark";
+import { View, Color, Rect, Logger, Button, Point, KeyEvent, Label } from "quark";
 import { DraggableView } from "./DraggableView";
 import { DrawingView } from "./DrawingView";
 
@@ -10,6 +10,10 @@ export class RootView extends View {
     private draggable1: DraggableView;
     private draggable2: DraggableView;
     private drawingView: DrawingView;
+    private label: Label;
+
+    public text: string = "";
+    public count: number = 100000;
 
     public constructor() {
         super();
@@ -29,7 +33,11 @@ export class RootView extends View {
         this.button.rect = new Rect(0, 0, 100, 100);
         this.addSubview(this.button);
         this.button.buttonDownHandler = (button) => Logger.print(`Button down ${button}`);
-        this.button.buttonUpHandler = (button) => Logger.print(`Button up ${button}`);
+        this.button.buttonUpHandler = (button) => {
+            Logger.print(`Button up ${button}`);
+            this.count++;
+            this.updateLabel()
+        };
 
         // Create the draggables
         this.draggable1 = new DraggableView();
@@ -47,9 +55,23 @@ export class RootView extends View {
         this.drawingView.rect = new Rect(10, 10, 100, 100);
         this.view2.addSubview(this.drawingView);
 
+        // Create a label
+        this.label = new Label();
+        this.label.text = "My Label";
+        this.label.rect = new Rect(100, 100, 100, 100);
+        this.addSubview(this.label);
+
         // Configure this view
         this.name = "Root view";
         this.backgroundColor = new Color(0.93, 0.93, 0.93, 1.00);
+    }
+
+    public updateLabel() {
+        this.label.color = new Color(Math.random(), Math.random(), Math.random(), 1);
+        this.label.backgroundColor = new Color(Math.random(), Math.random(), Math.random(), 1);
+        this.label.text = `Count: ${this.count}\n${this.text}`;
+        this.label.alignmentMode = this.count % 4;
+        this.label.lineBreakMode = this.count % 6;
     }
 
     layout() {

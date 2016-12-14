@@ -1,4 +1,4 @@
-import { View, InteractionEvent, Color, InteractionType, Point, Rect, Module, Logger, } from "quark";
+import { View, InteractionEvent, Color, InteractionType, Point, Rect } from "quark";
 import { Delegate } from "./Delegate";
 
 export class DrawingView extends View {

@@ -24,6 +24,10 @@ export class Delegate implements ModuleDelegate {
 
     public keyEvent(event: KeyEvent): boolean {
         Logger.print(`Unhandled key event. ${event.keyCode}`);
+        // See http://apps.timwhitlock.info/unicode/inspect
+        (Delegate.window.rootView as RootView).text += String.fromCharCode(0xD83E, 0xDD21);
+        (Delegate.window.rootView as RootView).updateLabel();
+
         return true;
     }
 }
