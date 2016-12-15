@@ -63,7 +63,8 @@ export class RootView extends View {
 
         // Configure this view
         this.name = "Root view";
-        this.backgroundColor = new Color(0.93, 0.93, 0.93, 1.00);
+        // this.backgroundColor = new Color(0.93, 0.93, 0.93, 1.00);
+        this.backgroundColor = new Color(0.16, 0.17, 0.21, 1.00);
     }
 
     public updateLabel() {
