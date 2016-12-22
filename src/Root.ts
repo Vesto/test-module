@@ -2,7 +2,7 @@ import { View, Color, Rect, Logger, Button, Point, KeyEvent, Label } from "quark
 import { DraggableView } from "./DraggableView";
 import { DrawingView } from "./DrawingView";
 
-export class RootView extends View {
+export class Root extends View {
 
     private view1: View;
     private view2: View;
@@ -13,7 +13,7 @@ export class RootView extends View {
     private label: Label;
 
     public text: string = "";
-    public count: number = 100000;
+    public count: number = 0;
 
     public constructor() {
         super();
@@ -48,7 +48,8 @@ export class RootView extends View {
         this.draggable2 = new DraggableView();
         this.draggable2.rect = new Rect(100, 0, 100, 100);
         this.draggable2.backgroundColor = new Color(0.99, 0.25, 0.39, 1.00);
-        this.addSubviewAt(this.draggable2, this.subviews.length - 2);
+        // this.addSubviewAt(this.draggable2, this.subviews.length - 2);
+        this.addSubview(this.draggable2);
 
         // Make drawing
         this.drawingView = new DrawingView();
@@ -76,9 +77,12 @@ export class RootView extends View {
     }
 
     layout() {
-        super.layout();
+        // Resize to fix parent
+        if (this.superview) {
+            this.rect = this.superview.rect.bounds;
+        }
 
-        // Logger.print("Did layout");
+        super.layout();
 
         let p = 10; // Padding
         this.view1.rect = new Rect(

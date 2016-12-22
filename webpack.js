@@ -1,27 +1,26 @@
 var webpack = require("webpack");
 
-var compiler = webpack( // TODO: Somehow force include `quark`. It doesn't include it at all if not used.
+var compiler = webpack(
     {
-        entry: [ './src/Delegate.ts' ],
+        entry: [ "./src/Delegate.ts" ],
         output: { // Output to a bundle using UMD
             libraryTarget: "umd",
             library: "app",
-            filename: 'bundle.js'
+            filename: "bundle.js"
         },
-        devtool: 'source-map', // Generate sourcemaps
+        devtool: "source-map", // Generate sourcemaps
         resolve: { // Extend module resolutions to include more file types
-            extensions: ['', '.webpack.js', '.web.js', '.ts', '.js']
+            extensions: [".webpack.js", ".web.js", ".ts", ".js"]
         },
         externals: {
-            "quark-native": "quark-native" // Use this because Quark exposes QK objects to `quark-native` object
+            "quark": "quark" // Use this because Quark exposes QK objects to `quark-native` object
         },
         plugins: [ // Minify the JS code
             // new webpack.optimize.UglifyJsPlugin()
         ],
         module: { // Use a module to load TypeScript
             loaders: [
-                { test: /\.ts$/, loader: 'ts-loader' }, // Load TS files with ts-loader
-                { test: require.resolve("quark"), loader: "expose-loader?quark" }, // Export quark with expose-loader
+                { test: /\.ts$/, loader: "ts-loader" } // Load TS files with ts-loader
             ]
         }
     }
