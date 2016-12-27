@@ -12,6 +12,6 @@
     "expose-loader": "^0.7.1",
     "ts-loader": "^1.2.2",
     "typescript": "^2.0.10",
-    "webpack": "^2.2.0-rc.1"
+    "webpack": "^2.2.0-rc.2"
   }
 }

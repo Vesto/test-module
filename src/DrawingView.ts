@@ -1,11 +1,11 @@
-import { View, InteractionEvent, Color, InteractionType, Point, Rect } from "quark";
-import { Delegate } from "./Delegate";
+import { View, InteractionEvent, Color, InteractionType, Point, Rect, Module, Logger } from "quark";
 
 export class DrawingView extends View {
     constructor() {
         super();
 
         this.backgroundColor = new Color(1, 1, 1, 1);
+        Logger.print("Draggable init", this, this.module);
     }
 
     interactionEvent(event: InteractionEvent): boolean {
@@ -18,7 +18,9 @@ export class DrawingView extends View {
     }
 
     private drawAt(location: Point) {
-        let newLocation = Delegate.window.rootView.convertPointTo(this, location);
+        let window = Module.shared.window;
+        if (!window) { return; }
+        let newLocation = window.rootView.convertPointTo(this, location);
         let v = new View();
         // noinspection JSSuspiciousNameCombination
         v.rect = new Rect(Math.floor(newLocation.x), Math.floor(newLocation.y), 1, 1);

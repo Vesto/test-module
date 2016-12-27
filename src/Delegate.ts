@@ -2,11 +2,9 @@ import { ModuleDelegate, ToolbarItem, Action, Window, KeyEvent, Logger, Interact
 import { Root } from "./Root";
 
 export class Delegate implements ModuleDelegate {
-    public static window: Window;
+    public root: Root;
 
-    public constructor() {
-
-    }
+    constructor() { Logger.print("Constructed"); }
 
     public createActions(): Action[] {
         return [];
@@ -17,11 +15,10 @@ export class Delegate implements ModuleDelegate {
     }
 
     public createInterface(window: Window): void {
-        Delegate.window = window;
-        let root = new Root();
-        window.rootView.addSubview(root);
+        this.root = new Root();
+        window.rootView.addSubview(this.root);
         window.rootView.layout = () => { // TODO: Use a better hack
-            root.layout();
+            this.root.layout();
         }
     }
 
@@ -33,8 +30,8 @@ export class Delegate implements ModuleDelegate {
     public keyEvent(event: KeyEvent): boolean {
         Logger.print(`Unhandled key event. ${event.keyCode}`);
         // See http://apps.timwhitlock.info/unicode/inspect
-        (Delegate.window.rootView as Root).text += String.fromCharCode(0xD83E, 0xDD21);
-        (Delegate.window.rootView as Root).updateLabel();
+        this.root.text += String.fromCharCode(0xD83E, 0xDD21);
+        this.root.updateLabel();
 
         return true;
     }
