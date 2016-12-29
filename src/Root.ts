@@ -1,6 +1,7 @@
-import { View, Color, Rect, Logger, Button, Point, KeyEvent, Label, Timer } from "quark";
+import { View, Color, Rect, Logger, Button, Point, KeyEvent, Label, Timer, Shadow } from "quark";
 import { DraggableView } from "./DraggableView";
 import { DrawingView } from "./DrawingView";
+import { AnimatingView } from "./AnimatingView";
 
 export class Root extends View {
 
@@ -62,6 +63,15 @@ export class Root extends View {
         this.label.rect = new Rect(100, 100, 100, 100);
         this.addSubview(this.label);
 
+        // Demonstrate all the animations
+        let typeCount = 6;
+        for (let i = 0; i < typeCount; i++) {
+            let v = new AnimatingView();
+            v.animationKind = i;
+            v.rect = new Rect(100 * i, 200, 100, 100);
+            this.addSubview(v);
+        }
+
         // Configure this view
         this.name = "Root view";
         // this.backgroundColor = new Color(0.93, 0.93, 0.93, 1.00);
@@ -74,6 +84,7 @@ export class Root extends View {
         timer.repeats = true;
         timer.start();
         Logger.print("Created timer", timer);
+
     }
 
     public updateLabel() {
