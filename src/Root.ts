@@ -88,11 +88,11 @@ export class Root extends View {
     }
 
     public updateLabel() {
-        this.label.color = new Color(Math.random(), Math.random(), Math.random(), 1);
+        this.label.textColor = new Color(Math.random(), Math.random(), Math.random(), 1);
         this.label.backgroundColor = new Color(Math.random(), Math.random(), Math.random(), 1);
         this.label.text = `Count: ${this.count}\n${this.text}`;
         this.label.alignmentMode = this.count % 4;
-        this.label.lineBreakMode = this.count % 6;
+        this.label.lineBreakMode = this.count % 2;
     }
 
     layout() {
