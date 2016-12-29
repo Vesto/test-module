@@ -25,7 +25,8 @@ export class Root extends View {
         this.button.buttonUpHandler = (button) => {
             Logger.print(`Button up ${button}`);
             this.count++;
-            this.updateLabel()
+            this.updateLabel();
+            this.button.isEmphasized = !this.button.isEmphasized;
         };
 
         // Create the draggables

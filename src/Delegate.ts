@@ -4,7 +4,7 @@ import { Root } from "./Root";
 export class Delegate implements ModuleDelegate {
     public root: Root;
 
-    constructor() { Logger.print("Constructed"); }
+    public constructor() { }
 
     public createActions(): Action[] {
         return [];

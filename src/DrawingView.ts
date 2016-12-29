@@ -1,13 +1,6 @@
 import { View, InteractionEvent, Color, InteractionType, Point, Rect, Module, Logger } from "quark";
 
 export class DrawingView extends View {
-    constructor() {
-        super();
-
-        this.backgroundColor = new Color(1, 1, 1, 1);
-        Logger.print("Draggable init", this, this.module);
-    }
-
     interactionEvent(event: InteractionEvent): boolean {
         if (event.type == InteractionType.LeftMouse) {
             this.drawAt(event.location);
