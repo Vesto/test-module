@@ -1,12 +1,9 @@
-import { View, Color, Rect, Logger, Button, Point, KeyEvent, Label, Timer, Shadow } from "quark";
+import { View, Color, Rect, Logger, Button, Point, KeyEvent, Label, Timer, Appearance } from "quark";
 import { DraggableView } from "./DraggableView";
 import { DrawingView } from "./DrawingView";
 import { AnimatingView } from "./AnimatingView";
 
 export class Root extends View {
-
-    private view1: View;
-    private view2: View;
     private button: Button;
     private draggable1: DraggableView;
     private draggable2: DraggableView;
@@ -18,16 +15,6 @@ export class Root extends View {
 
     public constructor() {
         super();
-
-        // Create some views
-        this.view1 = new View();
-        this.view2 = new View();
-        this.view1.backgroundColor = new Color(0.99, 0.69, 0.16, 1.00);
-        this.view2.backgroundColor = new Color(0.42, 0.94, 0.38, 1.00);
-        this.view1.name = "View 1";
-        this.view2.name = "View 2";
-        this.addSubview(this.view1);
-        this.addSubview(this.view2);
 
         // Create the button
         this.button = new Button();
@@ -54,8 +41,8 @@ export class Root extends View {
 
         // Make drawing
         this.drawingView = new DrawingView();
-        this.drawingView.rect = new Rect(10, 10, 100, 100);
-        this.view2.addSubview(this.drawingView);
+        this.drawingView.rect = new Rect(0, 100, 100, 100);
+        this.addSubview(this.drawingView);
 
         // Create a label
         this.label = new Label();
@@ -95,6 +82,13 @@ export class Root extends View {
         this.label.lineBreakMode = this.count % 2;
     }
 
+    public appearanceChanged(appearance: Appearance) {
+        super.appearanceChanged(appearance)
+
+        // Change view styles
+        this.backgroundColor = appearance.backgroundColor;
+    }
+
     layout() {
         // Resize to fix parent
         if (this.superview) {
@@ -103,15 +97,15 @@ export class Root extends View {
 
         super.layout();
 
-        let p = 10; // Padding
-        this.view1.rect = new Rect(
-            p, p,
-            this.rect.size.width / 2 - p * 2, this.rect.size.height - p * 2
-        );
-        this.view2.rect = new Rect(
-            this.rect.size.width / 2 + p, p,
-            this.rect.size.width / 2 - p * 2, this.rect.size.height - p * 2
-        );
+        // let p = 10; // Padding
+        // this.view1.rect = new Rect(
+        //     p, p,
+        //     this.rect.size.width / 2 - p * 2, this.rect.size.height - p * 2
+        // );
+        // this.view2.rect = new Rect(
+        //     this.rect.size.width / 2 + p, p,
+        //     this.rect.size.width / 2 - p * 2, this.rect.size.height - p * 2
+        // );
 
         this.button.center = new Point(this.rect.width / 2, this.rect.height / 2);
     }

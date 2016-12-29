@@ -1,4 +1,4 @@
-import { View, InteractionEvent, InteractionType, Point, EventPhase, Rect, Shadow, Color, PropertyAnimation } from "quark";
+import { View, InteractionEvent, InteractionType, Point, EventPhase, Rect, Shadow, Color, PropertyAnimation, Appearance } from "quark";
 
 export class DraggableView extends View {
     private previousLocation?: Point;
@@ -7,6 +7,13 @@ export class DraggableView extends View {
         super();
 
         this.shadow = this.shadowState(false);
+    }
+
+    appearanceChanged(appearance: Appearance) {
+        super.appearanceChanged(appearance);
+
+        this.backgroundColor = appearance.primaryColor;
+        this.cornerRadius = appearance.cornerRadius;
     }
 
     interactionEvent(event: InteractionEvent): boolean {
