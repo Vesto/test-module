@@ -12,8 +12,9 @@ export class DraggableView extends View {
     appearanceChanged(appearance: Appearance) {
         super.appearanceChanged(appearance);
 
-        this.backgroundColor = appearance.primaryColor;
-        this.cornerRadius = appearance.cornerRadius;
+        let oldShadow = this.shadow; // Retain the shadow
+        appearance.activeControl.styleView(this);
+        this.shadow = oldShadow ? oldShadow : new Shadow(Point.zero, 0, new Color(0, 0, 0, 0));
     }
 
     interactionEvent(event: InteractionEvent): boolean {

@@ -19,6 +19,7 @@ export class Root extends View {
         // Create the button
         this.button = new Button();
         this.button.rect = new Rect(0, 0, 100, 100);
+        this.button.title = "Click Here";
         this.addSubview(this.button);
         this.button.buttonDownHandler = (button) => Logger.print(`Button down ${button}`);
         this.button.buttonUpHandler = (button) => {
