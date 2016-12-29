@@ -1,4 +1,4 @@
-import { View, Color, Rect, Logger, Button, Point, KeyEvent, Label } from "quark";
+import { View, Color, Rect, Logger, Button, Point, KeyEvent, Label, Timer } from "quark";
 import { DraggableView } from "./DraggableView";
 import { DrawingView } from "./DrawingView";
 
@@ -66,6 +66,14 @@ export class Root extends View {
         this.name = "Root view";
         // this.backgroundColor = new Color(0.93, 0.93, 0.93, 1.00);
         this.backgroundColor = new Color(0.16, 0.17, 0.21, 1.00);
+
+        // Test the timers
+        let timer = new Timer(2, timer => {
+            Logger.print("Timer triggered");
+        });
+        timer.repeats = true;
+        timer.start();
+        Logger.print("Created timer", timer);
     }
 
     public updateLabel() {
