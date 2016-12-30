@@ -1,4 +1,4 @@
-import { View, Color, Rect, Logger, Button, Point, KeyEvent, Label, Timer, Appearance, LabelStyle } from "quark";
+import { View, Color, Rect, Logger, Button, Point, KeyEvent, Label, Timer, Appearance, LabelStyle, Size } from "quark";
 import { DraggableView } from "./DraggableView";
 import { DrawingView } from "./DrawingView";
 import { AnimatingView } from "./AnimatingView";
@@ -86,13 +86,23 @@ export class Root extends View {
     }
 
     public appearanceChanged(appearance: Appearance) {
-        super.appearanceChanged(appearance)
+        super.appearanceChanged(appearance);
 
         // Change view styles
         this.backgroundColor = appearance.backgroundColor;
+
+        // Change other stuff
+        this.button.rect.size.height = appearance.controlSize;
     }
 
     layout() {
+        // this.backgroundColor.red = Math.random();
+        // this.backgroundColor = new Color(Math.random(), 0, 0, 1);
+        this.backgroundColor.red = 1;
+        this.backgroundColor.green = 0;
+        this.backgroundColor.blue = 0;
+        this.backgroundColor.alpha = 1;
+
         // Resize to fix parent
         if (this.superview) {
             this.rect = this.superview.rect.bounds;

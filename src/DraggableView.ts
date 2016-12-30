@@ -1,4 +1,4 @@
-import { View, InteractionEvent, InteractionType, Point, EventPhase, Rect, Shadow, Color, PropertyAnimation, Appearance, Vector, AnimationLoop, Logger } from "quark";
+import { View, InteractionEvent, InteractionType, Point, EventPhase, Rect, Shadow, Color, PropertyAnimation, Appearance, Vector, AnimationLoop, ScrollEvent } from "quark";
 
 export class DraggableView extends View {
     private previousPointerTime: number;
@@ -37,7 +37,6 @@ export class DraggableView extends View {
     }
 
     interactionEvent(event: InteractionEvent): boolean {
-        Logger.print("Interaction", event.time, event, "Hover", InteractionType.Hover, "Left mouse", InteractionType.LeftMouse, "Ended", EventPhase.Ended);
         if (event.type == InteractionType.LeftMouse) {
             if (event.phase == EventPhase.Began) {
                 this.previousLocation = event.location;
@@ -58,14 +57,24 @@ export class DraggableView extends View {
                         .subtract(this.previousPreviousLocation)
                         .multiply(1 / dt);
 
-                Logger.print("velocity", this.velocity, "event.location", event.location, "this.previousLocation", this.previousPreviousLocation, "dt", dt);
-
                 this.animateToShadowState(false);
             }
             return true;
         }
 
         return super.interactionEvent(event);
+    }
+
+
+    scrollEvent(event: ScrollEvent): boolean {
+        // Scale on scroll
+        let oldCenter = this.center;
+        let scale = 0.2;
+        this.rect.size.width += event.deltaScroll.x * scale;
+        this.rect.size.height += event.deltaScroll.y * scale;
+        this.center = oldCenter;
+
+        return true;
     }
 
     private updatePosition(location: Point) {
