@@ -1,12 +1,31 @@
-import { View, InteractionEvent, InteractionType, Point, EventPhase, Rect, Shadow, Color, PropertyAnimation, Appearance } from "quark";
+import { View, InteractionEvent, InteractionType, Point, EventPhase, Rect, Shadow, Color, PropertyAnimation, Appearance, Vector, AnimationLoop, Logger } from "quark";
 
 export class DraggableView extends View {
-    private previousLocation?: Point;
+    private previousPointerTime: number;
+    private previousPreviousPointerTime: number;
+
+    private previousLocation: Point;
+    private previousPreviousLocation: Point;
+
+    private velocity?: Vector;
+
 
     public constructor() {
         super();
 
+        // Add hte basic shadow
         this.shadow = this.shadowState(false);
+
+        // Hook into the animation loop to do the velocity
+        AnimationLoop.addHook(dt => {
+            if (this.velocity) {
+                // Move the view
+                this.center = this.center.add(this.velocity.multiply(dt));
+
+                // Slow down the velocity
+                this.velocity = this.velocity.multiply(1 - dt * 3);
+            }
+        });
     }
 
     appearanceChanged(appearance: Appearance) {
@@ -18,14 +37,29 @@ export class DraggableView extends View {
     }
 
     interactionEvent(event: InteractionEvent): boolean {
+        Logger.print("Interaction", event.time, event, "Hover", InteractionType.Hover, "Left mouse", InteractionType.LeftMouse, "Ended", EventPhase.Ended);
         if (event.type == InteractionType.LeftMouse) {
             if (event.phase == EventPhase.Began) {
                 this.previousLocation = event.location;
+                this.previousPreviousLocation = event.location;
+                this.previousPointerTime = Date.now();
+                this.previousPreviousPointerTime = Date.now();
+
                 this.animateToShadowState(true);
+
+                // Clear the velocity
+                this.velocity = undefined;
             }  else if (event.phase == EventPhase.Changed) {
                 this.updatePosition(event.location);
             } else if (event.phase == EventPhase.Ended || event.phase == EventPhase.Cancelled) {
-                this.previousLocation = undefined;
+                // Calculate the final velocity
+                let dt = (Date.now() - this.previousPreviousPointerTime) / 1000;
+                this.velocity = event.location
+                        .subtract(this.previousPreviousLocation)
+                        .multiply(1 / dt);
+
+                Logger.print("velocity", this.velocity, "event.location", event.location, "this.previousLocation", this.previousPreviousLocation, "dt", dt);
+
                 this.animateToShadowState(false);
             }
             return true;
@@ -36,8 +70,7 @@ export class DraggableView extends View {
 
     private updatePosition(location: Point) {
         // Make sure there's a previous position
-        if (typeof this.previousLocation == "undefined")
-            return;
+        if (!this.previousLocation) { return; }
 
         // Move the view
         let delta = location.add(this.previousLocation.inverse());
@@ -47,7 +80,10 @@ export class DraggableView extends View {
         );
 
         // Save the previous position
+        this.previousPreviousLocation = this.previousLocation;
+        this.previousPreviousPointerTime = this.previousPointerTime;
         this.previousLocation = location;
+        this.previousPointerTime = Date.now();
     }
 
     private animateToShadowState(dragging: boolean) {
