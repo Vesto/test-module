@@ -1,4 +1,4 @@
-import { View, InteractionEvent, InteractionType, EventPhase, PropertyAnimation, Interpolatable, Color, Rect, Shadow, Point, Animation, GroupAnimation, SequenceAnimation } from "quark";
+import { View, InteractionEvent, InteractionType, EventPhase, PropertyAnimation, Interpolatable, Color, Rect, Shadow, Point, Animation, GroupAnimation, SequenceAnimation, Cloneable } from "quark";
 
 export class AnimatingView extends View {
     public animationKind: number = 0;
@@ -23,10 +23,10 @@ export class AnimatingView extends View {
 
     private animationForIndex(index: number): Animation {
         // Get the animation type
-        let animation: PropertyAnimation<Interpolatable>;
+        let animation: PropertyAnimation<any>;
         switch (index) {
             case 0: // Alpha
-                animation = new PropertyAnimation<number>();
+                animation = new PropertyAnimation<Number>();
                 animation.property = "alpha";
                 animation.to = Math.random();
                 break;

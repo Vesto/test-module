@@ -96,12 +96,7 @@ export class Root extends View {
     }
 
     layout() {
-        // this.backgroundColor.red = Math.random();
-        // this.backgroundColor = new Color(Math.random(), 0, 0, 1);
-        this.backgroundColor.red = 1;
-        this.backgroundColor.green = 0;
-        this.backgroundColor.blue = 0;
-        this.backgroundColor.alpha = 1;
+        this.backgroundColor.red = Math.random();
 
         // Resize to fix parent
         if (this.superview) {

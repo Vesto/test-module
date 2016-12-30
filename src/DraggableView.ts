@@ -1,4 +1,4 @@
-import { View, InteractionEvent, InteractionType, Point, EventPhase, Rect, Shadow, Color, PropertyAnimation, Appearance, Vector, AnimationLoop, ScrollEvent } from "quark";
+import { View, InteractionEvent, InteractionType, Point, EventPhase, Rect, Shadow, Color, PropertyAnimation, Appearance, Vector, AnimationLoop, ScrollEvent, Module } from "quark";
 
 export class DraggableView extends View {
     private previousPointerTime: number;
@@ -22,6 +22,9 @@ export class DraggableView extends View {
                 // Move the view
                 this.center = this.center.add(this.velocity.multiply(dt));
 
+                // Clamp
+                this.clampRect();
+
                 // Slow down the velocity
                 this.velocity = this.velocity.multiply(1 - dt * 3);
             }
@@ -31,7 +34,7 @@ export class DraggableView extends View {
     appearanceChanged(appearance: Appearance) {
         super.appearanceChanged(appearance);
 
-        let oldShadow = this.shadow; // Retain the shadow
+        let oldShadow = this.shadow ? this.shadow.clone() as Shadow : undefined; // Retain the shadow
         appearance.activeControl.styleView(this);
         this.shadow = oldShadow ? oldShadow : new Shadow(Point.zero, 0, new Color(0, 0, 0, 0));
     }
@@ -88,11 +91,26 @@ export class DraggableView extends View {
             this.rect.width, this.rect.height
         );
 
+        // Clamp
+        this.clampRect();
+
         // Save the previous position
         this.previousPreviousLocation = this.previousLocation;
         this.previousPreviousPointerTime = this.previousPointerTime;
         this.previousLocation = location;
         this.previousPointerTime = Date.now();
+    }
+
+    private clampRect(): void {
+        if (!Module.shared.window) { return; }
+
+        // Clamp to the boundaries
+        let boundaries = Module.shared.window.rootView.rect.size;
+        this.rect = new Rect(
+            Math.min(Math.max(this.rect.x, 0), boundaries.width - this.rect.width),
+            Math.min(Math.max(this.rect.y, 0), boundaries.height - this.rect.height),
+            this.rect.width, this.rect.height
+        );
     }
 
     private animateToShadowState(dragging: boolean) {
