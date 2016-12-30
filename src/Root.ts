@@ -1,4 +1,4 @@
-import { View, Color, Rect, Logger, Button, Point, KeyEvent, Label, Timer, Appearance } from "quark";
+import { View, Color, Rect, Logger, Button, Point, KeyEvent, Label, Timer, Appearance, LabelStyle } from "quark";
 import { DraggableView } from "./DraggableView";
 import { DrawingView } from "./DrawingView";
 import { AnimatingView } from "./AnimatingView";
@@ -48,6 +48,7 @@ export class Root extends View {
 
         // Create a label
         this.label = new Label();
+        this.label.style = LabelStyle.Text;
         this.label.text = "My Label";
         this.label.rect = new Rect(100, 100, 100, 100);
         this.addSubview(this.label);
