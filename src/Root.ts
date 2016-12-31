@@ -1,7 +1,9 @@
-import { View, Color, Rect, Logger, Button, Point, KeyEvent, Label, Timer, Appearance, LabelStyle, Size } from "quark";
+import { View, Color, Rect, Logger, Button, Point, KeyEvent, Label, Timer, Appearance, LabelStyle, Image, ImageView } from "quark";
 import { DraggableView } from "./DraggableView";
 import { DrawingView } from "./DrawingView";
 import { AnimatingView } from "./AnimatingView";
+
+declare function getAnImage(): Image;
 
 export class Root extends View {
     private button: Button;
@@ -9,6 +11,7 @@ export class Root extends View {
     private draggable2: DraggableView;
     private drawingView: DrawingView;
     private label: Label;
+    private imageView: ImageView;
 
     public text: string = "";
     public count: number = 0;
@@ -52,6 +55,12 @@ export class Root extends View {
         this.label.text = "My Label";
         this.label.rect = new Rect(100, 100, 100, 100);
         this.addSubview(this.label);
+
+        // Create an image
+        this.imageView = new ImageView();
+        this.imageView.image = getAnImage();
+        this.imageView.rect = new Rect(200, 100, 100, 100);
+        this.addSubview(this.imageView);
 
         // Demonstrate all the animations
         let typeCount = 6;
