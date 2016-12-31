@@ -31,7 +31,7 @@ export class Delegate implements ModuleDelegate {
         Logger.print(`Unhandled key event. ${event.keyCode}`);
         // See http://apps.timwhitlock.info/unicode/inspect
         this.root.text += String.fromCharCode(0xD83E, 0xDD21);
-        this.root.updateLabel();
+        this.root.updateRandomViews();
 
         return true;
     }

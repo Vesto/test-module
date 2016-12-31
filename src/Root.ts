@@ -1,4 +1,4 @@
-import { View, Color, Rect, Logger, Button, Point, KeyEvent, Label, Timer, Appearance, LabelStyle, Image, ImageView } from "quark";
+import { View, Color, Rect, Logger, Button, Point, KeyEvent, Label, Timer, Appearance, LabelStyle, Image, ImageView, Size } from "quark";
 import { DraggableView } from "./DraggableView";
 import { DrawingView } from "./DrawingView";
 import { AnimatingView } from "./AnimatingView";
@@ -24,11 +24,11 @@ export class Root extends View {
         this.button.rect = new Rect(0, 0, 100, 100);
         this.button.title = "Click Here";
         this.addSubview(this.button);
-        this.button.buttonDownHandler = (button) => Logger.print(`Button down ${button}`);
+        // this.button.buttonDownHandler = (button) => Logger.print(`Button down ${button}`);
         this.button.buttonUpHandler = (button) => {
-            Logger.print(`Button up ${button}`);
+            // Logger.print(`Button up ${button}`);
             this.count++;
-            this.updateLabel();
+            this.updateRandomViews();
             this.button.isEmphasized = !this.button.isEmphasized;
         };
 
@@ -41,6 +41,8 @@ export class Root extends View {
         this.draggable2 = new DraggableView();
         this.draggable2.rect = new Rect(100, 0, 100, 100);
         this.draggable2.backgroundColor = new Color(0.99, 0.25, 0.39, 1.00);
+        (this.draggable2 as any).backing._useFilterShadow = false; // Demonstrate rendering differences between filter and drop shadow
+        (this.draggable2 as any).backing.style.filter = "";
         // this.addSubviewAt(this.draggable2, this.subviews.length - 2);
         this.addSubview(this.draggable2);
 
@@ -58,8 +60,9 @@ export class Root extends View {
 
         // Create an image
         this.imageView = new ImageView();
-        this.imageView.image = getAnImage();
         this.imageView.rect = new Rect(200, 100, 100, 100);
+        this.imageView.backgroundColor = new Color(1, 1, 1, 0.25);
+        this.imageView.image = getAnImage();
         this.addSubview(this.imageView);
 
         // Demonstrate all the animations
@@ -77,21 +80,40 @@ export class Root extends View {
         this.backgroundColor = new Color(0.16, 0.17, 0.21, 1.00);
 
         // Test the timers
-        let timer = new Timer(2, timer => {
+        /*let timer = new Timer(2, timer => {
             Logger.print("Timer triggered");
         });
         timer.repeats = true;
         timer.start();
-        Logger.print("Created timer", timer);
+        Logger.print("Created timer", timer);*/
 
     }
 
-    public updateLabel() {
+    public updateRandomViews() {
+        // Label
         this.label.textColor = new Color(Math.random(), Math.random(), Math.random(), 1);
         this.label.backgroundColor = new Color(Math.random(), Math.random(), Math.random(), 1);
-        this.label.text = `Count: ${this.count}\n${this.text}`;
+        this.label.text = `Count: ${this.count}\n${this.text}\nTest`;
         this.label.alignmentMode = this.count % 4;
         this.label.lineBreakMode = this.count % 2;
+
+        // Image view
+        switch (this.count % 4) {
+            case 0:
+                this.imageView.scalingMode = "fill";
+                break;
+            case 1:
+                this.imageView.scalingMode = "aspect-fit";
+                break;
+            case 2:
+                this.imageView.scalingMode = "aspect-fill";
+                break;
+            case 3:
+                this.imageView.scalingMode = new Size(Math.random(), Math.random());
+                break;
+        }
+
+        this.imageView.alignment = new Point(Math.random(), Math.random());
     }
 
     public appearanceChanged(appearance: Appearance) {
@@ -105,7 +127,7 @@ export class Root extends View {
     }
 
     layout() {
-        this.backgroundColor.red = Math.random();
+        // this.backgroundColor.red = Math.random();
 
         // Resize to fix parent
         if (this.superview) {
