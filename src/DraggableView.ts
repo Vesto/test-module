@@ -9,6 +9,7 @@ export class DraggableView extends View {
 
     private velocity?: Vector;
 
+    public isBlurred: boolean = false;
 
     public constructor() {
         super();
@@ -37,6 +38,11 @@ export class DraggableView extends View {
         let oldShadow = this.shadow ? this.shadow.clone() as Shadow : undefined; // Retain the shadow
         appearance.activeControl.styleView(this);
         this.shadow = oldShadow ? oldShadow : new Shadow(Point.zero, 0, new Color(0, 0, 0, 0));
+
+        if (this.isBlurred) {
+            this.backgroundColor = new Color(1, 1, 1, 0.5);
+            this.backgroundBlur = 6;
+        }
     }
 
     interactionEvent(event: InteractionEvent): boolean {
@@ -123,6 +129,8 @@ export class DraggableView extends View {
     }
 
     private shadowState(dragging: boolean): Shadow {
+        if (this.isBlurred) { return new Shadow(Point.zero, 0, new Color(0, 0, 0, 0)); }
+
         if (dragging) {
             return new Shadow(new Point(0, 10), 30, new Color(0, 0, 0, 0.5));
         } else {

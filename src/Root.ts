@@ -7,8 +7,6 @@ declare function getAnImage(): Image;
 
 export class Root extends View {
     private button: Button;
-    private draggable1: DraggableView;
-    private draggable2: DraggableView;
     private drawingView: DrawingView;
     private label: Label;
     private imageView: ImageView;
@@ -31,20 +29,6 @@ export class Root extends View {
             this.updateRandomViews();
             this.button.isEmphasized = !this.button.isEmphasized;
         };
-
-        // Create the draggables
-        this.draggable1 = new DraggableView();
-        this.draggable1.rect = new Rect(0, 0, 100, 100);
-        this.draggable1.backgroundColor = new Color(0.17, 0.53, 0.77, 1.00);
-        this.addSubview(this.draggable1);
-
-        this.draggable2 = new DraggableView();
-        this.draggable2.rect = new Rect(100, 0, 100, 100);
-        this.draggable2.backgroundColor = new Color(0.99, 0.25, 0.39, 1.00);
-        (this.draggable2 as any).backing._useFilterShadow = false; // Demonstrate rendering differences between filter and drop shadow
-        (this.draggable2 as any).backing.style.filter = "";
-        // this.addSubviewAt(this.draggable2, this.subviews.length - 2);
-        this.addSubview(this.draggable2);
 
         // Make drawing
         this.drawingView = new DrawingView();
@@ -73,6 +57,22 @@ export class Root extends View {
             v.rect = new Rect(100 * i, 200, 100, 100);
             this.addSubview(v);
         }
+
+        // Create the draggables
+        let draggable1 = new DraggableView();
+        draggable1.rect = new Rect(0, 0, 100, 100);
+        this.addSubview(draggable1);
+
+        let draggable2 = new DraggableView();
+        draggable2.rect = new Rect(100, 0, 100, 100);
+        (draggable2 as any).backing._useFilterShadow = false; // Demonstrate rendering differences between filter and drop shadow
+        (draggable2 as any).backing.style.filter = "";
+        this.addSubview(draggable2);
+
+        let draggable3 = new DraggableView();
+        draggable3.rect = new Rect(200, 0, 100, 100);
+        draggable3.isBlurred = true;
+        this.addSubview(draggable3);
 
         // Configure this view
         this.name = "Root view";
