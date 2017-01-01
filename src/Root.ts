@@ -1,12 +1,13 @@
-import { View, Color, Rect, Logger, Button, Point, KeyEvent, Label, Timer, Appearance, LabelStyle, Image, ImageView, Size } from "quark";
+import { View, Color, Rect, Logger, Button, Point, KeyEvent, Label, Appearance, LabelStyle, Image, ImageView, Size, SegmentedControl, SegmentItem } from "quark";
 import { DraggableView } from "./DraggableView";
 import { DrawingView } from "./DrawingView";
 import { AnimatingView } from "./AnimatingView";
 
-declare function getAnImage(): Image;
+declare function getAnImage(): Image; // Temporary to get a test image
 
 export class Root extends View {
     private button: Button;
+    private segmentedControl: SegmentedControl;
     private drawingView: DrawingView;
     private label: Label;
     private imageView: ImageView;
@@ -19,16 +20,30 @@ export class Root extends View {
 
         // Create the button
         this.button = new Button();
-        this.button.rect = new Rect(0, 0, 100, 100);
+        this.button.rect = new Rect(0, 0, 100, 0);
         this.button.title = "Click Here";
-        this.addSubview(this.button);
-        // this.button.buttonDownHandler = (button) => Logger.print(`Button down ${button}`);
-        this.button.buttonUpHandler = (button) => {
+        this.button.onButtonUp = button => {
             // Logger.print(`Button up ${button}`);
             this.count++;
             this.updateRandomViews();
             this.button.isEmphasized = !this.button.isEmphasized;
         };
+        this.addSubview(this.button);
+
+        // Create a segmented control
+        this.segmentedControl = new SegmentedControl();
+        this.segmentedControl.rect = new Rect(0, 0, 400, 0);
+        this.segmentedControl.clearSegments();
+        this.segmentedControl.appendSegments(
+            new SegmentItem(true, "A", 1),
+            new SegmentItem(true, "B", 1),
+            new SegmentItem(true, "C", 2)
+        );
+        this.segmentedControl.selectedIndex = 0;
+        this.segmentedControl.onSelection = (control, index) => {
+            Logger.print("Selected index", index);
+        };
+        this.addSubview(this.segmentedControl);
 
         // Make drawing
         this.drawingView = new DrawingView();
@@ -114,6 +129,9 @@ export class Root extends View {
         }
 
         this.imageView.alignment = new Point(Math.random(), Math.random());
+
+        // Segmented control
+        this.segmentedControl.isMomentary = this.count % 2 === 0;
     }
 
     public appearanceChanged(appearance: Appearance) {
@@ -124,6 +142,7 @@ export class Root extends View {
 
         // Change other stuff
         this.button.rect.size.height = appearance.controlSize;
+        this.segmentedControl.rect.size.height = appearance.controlSize;
     }
 
     layout() {
@@ -147,6 +166,7 @@ export class Root extends View {
         // );
 
         this.button.center = new Point(this.rect.width / 2, this.rect.height / 2);
+        this.segmentedControl.center = new Point(this.rect.width / 2, this.rect.height / 2 + this.appearance.controlSize + 8);
     }
 
     keyEvent(event: KeyEvent): boolean {
