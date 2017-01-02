@@ -1,4 +1,4 @@
-import { View, Color, Rect, Logger, Button, Point, KeyEvent, Label, Appearance, LabelStyle, Image, ImageView, Size, SegmentedControl, SegmentItem } from "quark";
+import { View, Color, Rect, Logger, Button, Point, KeyEvent, Label, Appearance, LabelStyle, Image, ImageView, Size, SegmentedControl, SegmentItem, ScrollView } from "quark";
 import { DraggableView } from "./DraggableView";
 import { DrawingView } from "./DrawingView";
 import { AnimatingView } from "./AnimatingView";
@@ -11,6 +11,7 @@ export class Root extends View {
     private drawingView: DrawingView;
     private label: Label;
     private imageView: ImageView;
+    private scrollView: ScrollView;
 
     public text: string = "";
     public count: number = 0;
@@ -65,6 +66,70 @@ export class Root extends View {
         this.imageView.backgroundColor = new Color(1, 1, 1, 0.25);
         this.imageView.image = getAnImage();
         this.addSubview(this.imageView);
+
+        // Create a scroll view
+        this.scrollView = new ScrollView();
+        this.scrollView.backgroundColor = new Color(1, 1, 1, 0.1);
+        this.scrollView.rect = new Rect(0, 300, 300, 200);
+        this.scrollView.contentSize = new Size(500, 500);
+        this.addSubview(this.scrollView);
+
+        // Add content to the scroll view
+        let img = new ImageView();
+        img.rect = new Rect(0, 0, 500, 500);
+        img.image = getAnImage();
+        this.scrollView.addSubview(img);
+
+        let label = new Label();
+        label.rect = new Rect(200, 200, 100, 100);
+        label.text = "hello, world";
+        this.scrollView.addSubview(label);
+
+        // Add scroll type controller
+        let scrollType = new SegmentedControl();
+        scrollType.rect = new Rect(8, 508, 300 - 16, 44);
+        scrollType.clearSegments();
+        scrollType.appendSegments(
+            new SegmentItem(true, "None", 1),
+            new SegmentItem(true, "Horizontal", 1),
+            new SegmentItem(true, "Vertical", 1),
+            new SegmentItem(true, "Both", 1),
+        );
+        scrollType.onSelection = (control, index) => {
+            switch (index) {
+                case 0:
+                    this.scrollView.scrollsHorizontally = false;
+                    this.scrollView.scrollsVertically = false;
+                    break;
+                case 1:
+                    this.scrollView.scrollsHorizontally = true;
+                    this.scrollView.scrollsVertically = false;
+                    break;
+                case 2:
+                    this.scrollView.scrollsHorizontally = false;
+                    this.scrollView.scrollsVertically = true;
+                    break;
+                case 3:
+                    this.scrollView.scrollsHorizontally = true;
+                    this.scrollView.scrollsVertically = true;
+                    break;
+            }
+        };
+        this.addSubview(scrollType);
+
+        // Add scroll randomly button
+        let scrollRandomly = new Button();
+        scrollRandomly.rect = new Rect(8, 508 + 44 + 8, 300 - 16, 44);
+        scrollRandomly.title = "Scroll Randomly";
+        scrollRandomly.onButtonUp = () => {
+            this.scrollView.contentOffset = new Point(Math.random() * 500, Math.random() * 500);
+        };
+        this.addSubview(scrollRandomly);
+
+        // Do stuff on scroll
+        this.scrollView.onScroll = (scrollView, offset) => {
+            scrollRandomly.title = `X: ${offset.x} Y: ${offset.y}`;
+        };
 
         // Demonstrate all the animations
         let typeCount = 6;
@@ -151,8 +216,6 @@ export class Root extends View {
     }
 
     layout() {
-        // this.backgroundColor.red = Math.random();
-
         // Resize to fix parent
         if (this.superview) {
             this.rect = this.superview.rect.bounds;
@@ -160,18 +223,14 @@ export class Root extends View {
 
         super.layout();
 
-        // let p = 10; // Padding
-        // this.view1.rect = new Rect(
-        //     p, p,
-        //     this.rect.size.width / 2 - p * 2, this.rect.size.height - p * 2
-        // );
-        // this.view2.rect = new Rect(
-        //     this.rect.size.width / 2 + p, p,
-        //     this.rect.size.width / 2 - p * 2, this.rect.size.height - p * 2
-        // );
-
-        this.button.center = new Point(this.rect.width / 2, this.rect.height / 2);
-        this.segmentedControl.center = new Point(this.rect.width / 2, this.rect.height / 2 + this.appearance.controlSize + 8);
+        this.button.center = new Point(
+            this.rect.width - this.button.rect.width / 2 - this.appearance.normalControl.padding,
+            this.button.rect.height / 2 + this.appearance.normalControl.padding
+        );
+        this.segmentedControl.center = new Point(
+            this.rect.width - this.segmentedControl.rect.width / 2 - this.appearance.normalControl.padding,
+            this.button.center.y + this.appearance.controlSize + this.appearance.normalControl.padding
+        );
     }
 
     keyEvent(event: KeyEvent): boolean {
