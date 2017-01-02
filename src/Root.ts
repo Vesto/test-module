@@ -35,9 +35,11 @@ export class Root extends View {
         this.segmentedControl.rect = new Rect(0, 0, 400, 0);
         this.segmentedControl.clearSegments();
         this.segmentedControl.appendSegments(
-            new SegmentItem(true, "A", 1),
-            new SegmentItem(true, "B", 1),
-            new SegmentItem(true, "C", 2)
+            new SegmentItem(true, "V", 1),
+            new SegmentItem(true, "E", 2),
+            new SegmentItem(true, "S", 3),
+            new SegmentItem(false, "T", 2),
+            new SegmentItem(true, "O", 1),
         );
         this.segmentedControl.selectedIndex = 0;
         this.segmentedControl.onSelection = (control, index) => {
