@@ -113,17 +113,20 @@ export class Root extends View {
         this.label.lineBreakMode = this.count % 2;
 
         // Image view
-        switch (this.count % 4) {
+        switch (this.count % 5) {
             case 0:
-                this.imageView.scalingMode = "fill";
+                this.imageView.scalingMode = "none";
                 break;
             case 1:
-                this.imageView.scalingMode = "aspect-fit";
+                this.imageView.scalingMode = "fill";
                 break;
             case 2:
-                this.imageView.scalingMode = "aspect-fill";
+                this.imageView.scalingMode = "aspect-fit";
                 break;
             case 3:
+                this.imageView.scalingMode = "aspect-fill";
+                break;
+            case 4:
                 this.imageView.scalingMode = new Size(Math.random(), Math.random());
                 break;
         }
