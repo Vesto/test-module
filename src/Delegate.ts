@@ -26,13 +26,4 @@ export class Delegate implements ModuleDelegate {
         // Logger.print(`Interaction event ${event.type} ${event.phase}`);
         return true;
     }
-
-    public keyEvent(event: KeyEvent): boolean {
-        Logger.print(`Unhandled key event. ${event.keyCode}`);
-        // See http://apps.timwhitlock.info/unicode/inspect
-        this.root.text += String.fromCharCode(0xD83E, 0xDD21);
-        this.root.updateRandomViews();
-
-        return true;
-    }
 }

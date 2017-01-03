@@ -108,10 +108,10 @@ export class DraggableView extends View {
     }
 
     private clampRect(): void {
-        if (!Module.shared.window) { return; }
+        if (!this.superview) { return; }
 
         // Clamp to the boundaries
-        let boundaries = Module.shared.window.rootView.rect.size;
+        let boundaries = this.superview.rect.size;
         this.rect = new Rect(
             Math.min(Math.max(this.rect.x, 0), boundaries.width - this.rect.width),
             Math.min(Math.max(this.rect.y, 0), boundaries.height - this.rect.height),
