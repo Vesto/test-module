@@ -95,7 +95,7 @@ export class ScrollViewDemo extends Demo {
     public layout(): void {
         super.layout();
 
-        this.scrollView.center = new Point(this.rect.width / 2, this.rect.height / 2);
+        this.scrollView.center = this.rect.bounds.center;
         this.scrollInfo.center = new Point(this.rect.width / 2, this.rect.height / 2 - this.scrollViewSize.height / 2 - this.scrollInfo.rect.height / 2 - this.appearance.spacing);
         this.scrollType.center = new Point(this.rect.width / 2, this.rect.height / 2 + this.scrollViewSize.height / 2 + this.appearance.controlSize + this.appearance.spacing);
         this.scrollRandomly.center = new Point(this.rect.width / 2, this.scrollType.center.y + this.appearance.controlSize + this.appearance.spacing)

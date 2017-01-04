@@ -1,4 +1,4 @@
-import { View, Size, Point, Color, SegmentedControl, SegmentItem, Button, Appearance, PropertyAnimation, GroupAnimation, SequenceAnimation, Rect, Shadow } from "quark";
+import { View, Size, Point, Color, SegmentedControl, SegmentItem, Button, Appearance, PropertyAnimation, GroupAnimation, SequenceAnimation, Rect, Shadow, Logger } from "quark";
 import { Demo } from "./Demo";
 
 export class AnimationDemo extends Demo {
@@ -29,7 +29,7 @@ export class AnimationDemo extends Demo {
             new SegmentItem(true, "Sequence", 1)
         );
         this.animationSelector.onSelection = (control, index) => {
-            if (index) {
+            if (typeof index === "number") {
                 this.animateForIndex(index);
             }
         };
@@ -54,7 +54,7 @@ export class AnimationDemo extends Demo {
     public layout(): void {
         super.layout();
 
-        this.animatingView.center = new Point(this.rect.width / 2, this.rect.height / 2);
+        this.animatingView.center = this.rect.bounds.center;
         this.animationSelector.rect.point = new Point(this.appearance.spacing, this.appearance.spacing);
         this.resetButton.rect.point = new Point(this.appearance.spacing, this.animationSelector.rect.y + this.animationSelector.rect.height + this.appearance.spacing)
     }
@@ -127,6 +127,6 @@ export class AnimationDemo extends Demo {
         this.animatingView.alpha = 1;
         this.animatingView.backgroundColor = new Color(1, 1, 1, 1);
         this.animatingView.shadow = undefined;
-        this.animatingView.center = new Point(this.rect.width / 2, this.rect.height / 2);
+        this.animatingView.center = this.rect.bounds.center;
     }
 }

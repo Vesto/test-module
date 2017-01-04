@@ -35,9 +35,8 @@ export class DraggableView extends View {
     appearanceChanged(appearance: Appearance) {
         super.appearanceChanged(appearance);
 
-        let oldShadow = this.shadow ? this.shadow.clone() as Shadow : undefined; // Retain the shadow
-        appearance.activeControl.styleView(this);
-        this.shadow = oldShadow ? oldShadow : new Shadow(Point.zero, 0, new Color(0, 0, 0, 0));
+        this.cornerRadius = appearance.cornerRadius;
+        this.backgroundColor = appearance.primaryColor;
 
         if (this.isBlurred) {
             this.backgroundColor = new Color(1, 1, 1, 0.5);

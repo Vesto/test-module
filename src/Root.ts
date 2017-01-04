@@ -1,4 +1,4 @@
-import { View, Color, Rect, Point, Appearance, Image, Size, SegmentedControl, SegmentItem } from "quark";
+import { View, Color, Rect, Point, Appearance, Image, Size, SegmentedControl, SegmentItem, Logger } from "quark";
 import { ImageDemo } from "./demos/ImageDemo";
 import { LabelDemo } from "./demos/LabelDemo";
 import { MiscDemo } from "./demos/MiscDemo";
@@ -6,6 +6,7 @@ import { ScrollViewDemo } from "./demos/ScrollViewDemo";
 import { TimerDemo } from "./demos/TimerDemo";
 import { AnimationDemo } from "./demos/AnimationDemo";
 import { Demo } from "./demos/Demo";
+import { ProjectManagement } from "./demos/project_management/ProjectManagement";
 
 declare global {
     function getAnImage(): Image; // Temporary to get a test image
@@ -13,6 +14,7 @@ declare global {
 
 export class Root extends View {
     public demos: { [name: string]: Demo; } = {
+        "Project Management": new ProjectManagement(),
         "Animation": new AnimationDemo(),
         "Label": new LabelDemo(),
         "Image": new ImageDemo(),
@@ -30,13 +32,12 @@ export class Root extends View {
         super();
 
         // Create the title bar
-        this.titleBar = new View();
-        this.titleBar.backgroundColor = Color.fromHex("4B4A5A");
+        this.titleBar = new TitleBar();
         this.addSubview(this.titleBar);
 
         // Create the control
         this.tabControl = new SegmentedControl();
-        this.tabControl.rect.size = new Size(600, 23);
+        this.tabControl.rect.size = new Size(800, 23);
         this.tabControl.onSelection = (control, index) => {
             this.selectDemo(control.segments[index as number].content as string);
         };
@@ -47,7 +48,7 @@ export class Root extends View {
             let demo = this.demos[demoName];
 
             // Add as segment
-            this.tabControl.appendSegment(new SegmentItem(true, demoName, 1));
+            this.tabControl.appendSegment(new SegmentItem(true, demoName, demoName === "Project Management" ? 2 : 1));
 
             // Hide the demo
             demo.isHidden = true;
@@ -84,7 +85,7 @@ export class Root extends View {
         this.titleBar.rect = new Rect(0, 0, this.rect.width, 38);
 
         // Move the tab layout to the appropriate position
-        this.tabControl.center = new Point(this.titleBar.rect.width / 2, this.titleBar.rect.height / 2);
+        this.tabControl.center = this.titleBar.rect.bounds.center;
 
         // Resize the demos
         for (let demoName in this.demos) {
@@ -110,13 +111,25 @@ export class Root extends View {
     }
 }
 
+// TODO: add official title bar support
 export class TitleBar extends View {
+    public constructor() {
+        super();
+
+        // Make the region draggable
+        (this.backing as any).style.webkitAppRegion = "drag";
+    }
+
     public get appearance(): Appearance { return this._appearance; }
     public set appearance(appearance: Appearance) {
-        // Save the appearance
-        this._appearance = appearance.clone();
+        // Clone, modify, and set new appearance
+        let newAppearance = appearance.clone();
+        newAppearance.secondaryColor = appearance.backgroundColor;
+        newAppearance.backgroundColor = appearance.secondaryColor;
+        newAppearance.controlSize = 23;
+        super.appearance = newAppearance;
 
-        // Modify the appearance
-        this.appearance.controlSize = 23;
+        // Set background
+        this.backgroundColor = this.appearance.backgroundColor;
     }
 }
