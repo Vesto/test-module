@@ -1,0 +1,5 @@
+export let exampleText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ut massa varius, interdum odio ac, laoreet enim. Phasellus finibus ultricies felis vitae hendrerit. Quisque eu nisl varius, venenatis arcu ut, vehicula urna. Morbi eget tristique mauris. Vivamus varius, enim a suscipit cursus, magna tortor hendrerit quam, quis finibus lectus tortor et velit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas nec tincidunt libero. Praesent convallis mattis semper. Duis cursus pulvinar tempor. Duis sapien nunc, lobortis non justo vel, congue rhoncus magna. Nunc fermentum lobortis elit vel vehicula. Nulla facilisi. Suspendisse iaculis facilisis sapien, quis convallis metus luctus rhoncus. Cras.".split(" ");
+
+export function generateExampleText(words: number): string {
+    return exampleText.slice(0, words).join(" ");
+}

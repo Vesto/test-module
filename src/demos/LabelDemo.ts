@@ -1,4 +1,4 @@
-import { Label, Size, Point, SegmentedControl, SegmentItem, TextField, Font, Color, View, Rect, Logger } from "quark";
+import { Label, Size, Point, SegmentedControl, SegmentItem, TextField, Font, Color, View, Rect, Logger, LabelStyle, Appearance } from "quark";
 import { Demo } from "./Demo";
 
 export class LabelDemo extends Demo {
@@ -13,6 +13,7 @@ export class LabelDemo extends Demo {
     public alignment: SegmentedControl;
     public verticalAlignment: SegmentedControl;
     public style: SegmentedControl;
+    public sizeIndicator: Label;
 
     public constructor() {
         super();
@@ -26,7 +27,7 @@ export class LabelDemo extends Demo {
         // Controls
         this.textContent = new TextField();
         this.textContent.onChange = (field, text) => {
-            this.label.text = text;
+            this.updateText();
         };
         this.textContent.text = "Hello, world!";
         this.addSubview(this.textContent);
@@ -127,6 +128,23 @@ export class LabelDemo extends Demo {
         };
         this.style.selectedIndex = 2;
         this.addSubview(this.style);
+
+        this.sizeIndicator = new Label();
+        this.sizeIndicator.style = LabelStyle.Text;
+        this.addSubview(this.sizeIndicator);
+
+        // Update the properties
+        this.updateText();
+        this.updateFont();
+    }
+
+    public updateText() {
+        // Update the text
+        this.label.text = this.textContent.text;
+
+        // Update the text size
+        let size = this.label.textSize;
+        this.sizeIndicator.text = `${size.width}x${size.height}`;
     }
 
     public updateFont() {
@@ -138,6 +156,12 @@ export class LabelDemo extends Demo {
         }
     }
 
+    public appearanceChanged(appearance: Appearance): void {
+        super.appearanceChanged(appearance);
+
+        this.sizeIndicator.textColor = appearance.primaryColor;
+    }
+
     public layout(): void {
         super.layout();
 
@@ -145,7 +169,7 @@ export class LabelDemo extends Demo {
         this.label.center = new Point(this.rect.width / 2 - this.label.rect.width - this.appearance.spacing, this.label.rect.height / 2 + this.appearance.spacing);
 
         // Layout the controls
-        let controls: View[] = [ this.textContent, this.fontFamily, this.textColor, this.lineBreak, this.alignment, this.verticalAlignment, this.style ];
+        let controls: View[] = [ this.textContent, this.fontFamily, this.textColor, this.lineBreak, this.alignment, this.verticalAlignment, this.style, this.sizeIndicator ];
         let yShift = this.appearance.spacing;
         for (let control of controls) {
             control.rect = new Rect(

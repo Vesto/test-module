@@ -88,6 +88,7 @@ export class ScrollViewDemo extends Demo {
     public appearanceChanged(appearance: Appearance): void {
         super.appearanceChanged(appearance);
 
+        this.scrollInfo.textColor = appearance.primaryColor;
         this.scrollType.rect.size = new Size(this.scrollType.rect.size.width, this.appearance.controlSize);
         this.scrollRandomly.rect.size = new Size(this.scrollRandomly.rect.size.width, this.appearance.controlSize);
     }

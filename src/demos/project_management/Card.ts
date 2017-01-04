@@ -1,4 +1,4 @@
-import { View, Label, LabelStyle, Appearance, Rect } from "quark";
+import { View, Label, LabelStyle, Appearance, Rect, Size } from "quark";
 
 export class Card extends View {
     public title: Label;
@@ -16,6 +16,11 @@ export class Card extends View {
     public layout(): void {
         super.layout();
 
+        // Resize this view based on the rect's text size
+        let textSize = this.title.textSize;
+        this.rect.size = new Size(this.rect.size.width, textSize.height + this.appearance.spacing * 2);
+
+        // Resize the title
         this.title.rect = new Rect(
             this.appearance.spacing, this.appearance.spacing,
             this.rect.width - this.appearance.spacing * 2, this.rect.height - this.appearance.spacing * 2

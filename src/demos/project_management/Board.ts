@@ -1,5 +1,6 @@
 import { View, Size, Label, Appearance, ScrollView, LabelStyle, Rect, Button, Color } from "quark";
 import { Card } from "./Card";
+import { generateExampleText } from "../../utils/ExampleText";
 
 export class Board extends View {
     public cards: Card[] = [];
@@ -27,6 +28,7 @@ export class Board extends View {
     public get cardsHeight(): number {
         let height: number = 0;
         for (let card of this.cards) {
+            card.layout();
             height += card.rect.height + this.appearance.spacing;
         }
         height -= this.appearance.spacing; // Subtract the last spacing
@@ -54,7 +56,7 @@ export class Board extends View {
 
         // Add some cards
         for (let i = 0; i < Math.random() * 20 + 2; i++) {
-            let card = new Card(`Card ${i + 1}`);
+            let card = new Card(generateExampleText(Math.random() * 10 + 1));
             card.rect.size = new Size(0, 60);
             this.cardContainer.addSubview(card);
             this.cards.push(card);
