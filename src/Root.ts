@@ -7,6 +7,7 @@ import { TimerDemo } from "./demos/TimerDemo";
 import { AnimationDemo } from "./demos/AnimationDemo";
 import { Demo } from "./demos/Demo";
 import { ProjectManagement } from "./demos/project_management/ProjectManagement";
+import {WebSocketDemo} from "./demos/WebSocketDemo";
 
 declare global {
     function getAnImage(): Image; // Temporary to get a test image
@@ -20,6 +21,7 @@ export class Root extends View {
         "Image": new ImageDemo(),
         "Scroll View": new ScrollViewDemo(),
         "Timer": new TimerDemo(),
+        "WebSocket": new WebSocketDemo(),
         "Misc": new MiscDemo(),
     };
 
