@@ -30,15 +30,15 @@ export class WebSocketDemo extends Demo {
         };
 
         socket.onMessage = (socket, data) => {
-            Logger.print("Socket message", socket, data);
+            // Logger.print("Socket message", socket, data);
         };
 
         function sendSomething() {
-            Logger.print("Socket state", socket.state);
+            // Logger.print("Socket state", socket.state);
             if (socket.state === WebSocket.State.Open) {
                 let sendData = Math.random().toString();
                 socket.send(sendData);
-                Logger.print("Socket sent", sendData);
+                // Logger.print("Socket sent", sendData);
             }
         }
 

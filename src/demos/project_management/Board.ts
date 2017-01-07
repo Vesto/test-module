@@ -76,8 +76,8 @@ export class Board extends View {
             this.rect.width - this.appearance.spacing * 2, this.appearance.controlSize
         );
         this.cardContainer.rect = new Rect(
-            0, this.title.rect.maxY,
-            this.rect.width, this.addCardButton.rect.minY - this.title.rect.maxY - this.appearance.spacing
+            this.appearance.spacing, this.title.rect.maxY,
+            this.rect.width - this.appearance.spacing * 2, this.addCardButton.rect.minY - this.title.rect.maxY - this.appearance.spacing
         );
         this.cardContainer.contentSize = new Size(this.cardContainer.rect.width, this.cardsHeight);
 
@@ -85,8 +85,8 @@ export class Board extends View {
         let yShift = 0;
         for (let card of this.cards) {
             card.rect = new Rect(
-                this.appearance.spacing, yShift,
-                this.cardContainer.contentSize.width - this.appearance.spacing * 2, card.rect.height
+                0, yShift,
+                this.cardContainer.contentSize.width, card.rect.height
             );
             yShift += card.rect.height + this.appearance.spacing;
         }
@@ -99,6 +99,7 @@ export class Board extends View {
         this.backgroundColor = appearance.tertiaryColor;
         this.title.textColor = appearance.primaryColor;
         this.cornerRadius = appearance.cornerRadius;
+        this.cardContainer.cornerRadius = appearance.cornerRadius;
     }
 
     public resizeBoard(): void {

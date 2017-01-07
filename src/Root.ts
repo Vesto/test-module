@@ -8,6 +8,7 @@ import { AnimationDemo } from "./demos/AnimationDemo";
 import { Demo } from "./demos/Demo";
 import { ProjectManagement } from "./demos/project_management/ProjectManagement";
 import {WebSocketDemo} from "./demos/WebSocketDemo";
+import {AutoLayoutDemo} from "./demos/AutoLayoutDemo";
 
 declare global {
     function getAnImage(): Image; // Temporary to get a test image
@@ -16,6 +17,7 @@ declare global {
 export class Root extends View {
     public demos: { [name: string]: Demo; } = {
         "Project Management": new ProjectManagement(),
+        "AutoLayout": new AutoLayoutDemo(),
         "Animation": new AnimationDemo(),
         "Label": new LabelDemo(),
         "Image": new ImageDemo(),
@@ -23,6 +25,10 @@ export class Root extends View {
         "Timer": new TimerDemo(),
         "WebSocket": new WebSocketDemo(),
         "Misc": new MiscDemo(),
+    };
+    public customDemoWidths: { [name: string]: number } = {
+        "Project Management": 2,
+        "AutoLayout": 1.5
     };
 
     public titleBar: View;
@@ -50,7 +56,8 @@ export class Root extends View {
             let demo = this.demos[demoName];
 
             // Add as segment
-            this.tabControl.appendSegment(new SegmentItem(true, demoName, demoName === "Project Management" ? 2 : 1));
+            let customWidth = this.customDemoWidths[demoName];
+            this.tabControl.appendSegment(new SegmentItem(true, demoName, customWidth ? customWidth : 1));
 
             // Hide the demo
             demo.isHidden = true;
