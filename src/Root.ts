@@ -7,8 +7,8 @@ import { TimerDemo } from "./demos/TimerDemo";
 import { AnimationDemo } from "./demos/AnimationDemo";
 import { Demo } from "./demos/Demo";
 import { ProjectManagement } from "./demos/project_management/ProjectManagement";
-import {WebSocketDemo} from "./demos/WebSocketDemo";
-import {AutoLayoutDemo} from "./demos/AutoLayoutDemo";
+import { WebSocketDemo } from "./demos/WebSocketDemo";
+import { AutoLayoutDemo } from "./demos/AutoLayoutDemo";
 
 declare global {
     function getAnImage(): Image; // Temporary to get a test image

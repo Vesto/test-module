@@ -1,13 +1,16 @@
-import { View, Rect, ScrollView, ImageView, Label, SegmentedControl, SegmentItem, Color, Size, Button, Point, Appearance, LabelStyle, TextAlignmentMode } from "quark";
+import { View, Rect, ScrollView, ImageView, Label, SegmentedControl, SegmentItem, Color, Size, Button, Point, Appearance, LabelStyle, TextAlignmentMode, Constraint } from "quark";
 import { Demo } from "./Demo";
 
 export class ScrollViewDemo extends Demo {
     public scrollView: ScrollView;
+
     public scrollType: SegmentedControl;
     public scrollRandomly: Button;
     public scrollInfo: Label;
 
     public scrollViewSize = new Size(300, 300);
+
+    public controlHeightConstraint: Constraint;
 
     public constructor() {
         super();
@@ -83,22 +86,46 @@ export class ScrollViewDemo extends Demo {
         this.scrollView.onScroll = (scrollView, offset) => {
             this.scrollInfo.text = `X: ${offset.x} Y: ${offset.y} W: ${scrollView.contentSize.width} H: ${scrollView.contentSize.height}`;
         };
+
+        // Add constraints
+        this.useAutoLayout = true;
+        this.controlHeightConstraint = new Constraint(
+            this.scrollType, Constraint.Attribute.Height, Constraint.Relation.Equal,
+            undefined, Constraint.Attribute.Constant,
+            1, 0, 1
+        );
+        this.addConstraint(this.controlHeightConstraint);
+        this.addConstraints(Constraint.fromVFL(
+            [
+                "[scrollView(300)]-(>=50%)-|",
+                "V:|-[scrollView(scrollView.width)]",
+
+                "|-(>=50%)-[scrollType(400),scrollRandomly(scrollType),scrollInfo(scrollType)]",
+                "V:|-[scrollType]-[scrollRandomly(scrollType)]-[scrollInfo(scrollType)]",
+
+                "[scrollView]-(16)-[scrollType]"
+            ],
+            {
+                scrollView: this.scrollView,
+
+                scrollType: this.scrollType,
+                scrollRandomly: this.scrollRandomly,
+                scrollInfo: this.scrollInfo
+            }
+        ))
     }
 
     public appearanceChanged(appearance: Appearance): void {
         super.appearanceChanged(appearance);
 
         this.scrollInfo.textColor = appearance.primaryColor;
-        this.scrollType.rect.size = new Size(this.scrollType.rect.size.width, this.appearance.controlSize);
-        this.scrollRandomly.rect.size = new Size(this.scrollRandomly.rect.size.width, this.appearance.controlSize);
+
+        this.controlHeightConstraint.constant = appearance.controlSize;
+        this.applyConstraints();
     }
 
     public layout(): void {
         super.layout();
 
-        this.scrollView.center = this.rect.bounds.center;
-        this.scrollInfo.center = new Point(this.rect.width / 2, this.rect.height / 2 - this.scrollViewSize.height / 2 - this.scrollInfo.rect.height / 2 - this.appearance.spacing);
-        this.scrollType.center = new Point(this.rect.width / 2, this.rect.height / 2 + this.scrollViewSize.height / 2 + this.appearance.controlSize + this.appearance.spacing);
-        this.scrollRandomly.center = new Point(this.rect.width / 2, this.scrollType.center.y + this.appearance.controlSize + this.appearance.spacing)
     }
 }

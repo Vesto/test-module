@@ -1,4 +1,4 @@
-import { Label, Size, Point, SegmentedControl, SegmentItem, TextField, Font, Color, View, Rect, Logger, LabelStyle, Appearance } from "quark";
+import { Label, Size, Point, SegmentedControl, SegmentItem, TextField, Font, Color, Logger, LabelStyle, Appearance, Constraint } from "quark";
 import { Demo } from "./Demo";
 
 export class LabelDemo extends Demo {
@@ -15,12 +15,13 @@ export class LabelDemo extends Demo {
     public style: SegmentedControl;
     public sizeIndicator: Label;
 
+    public controlHeightConstraint: Constraint;
+
     public constructor() {
         super();
 
         // Create the label
         this.label = new Label();
-        this.label.rect.size = new Size(200, 200);
         this.label.text = "Test";
         this.addSubview(this.label);
 
@@ -136,6 +137,38 @@ export class LabelDemo extends Demo {
         // Update the properties
         this.updateText();
         this.updateFont();
+
+        // Add constraints
+        this.useAutoLayout = true;
+        this.controlHeightConstraint = new Constraint(
+            this.textContent, Constraint.Attribute.Height, Constraint.Relation.Equal,
+            undefined, Constraint.Attribute.Constant,
+            1, 0, 1
+        );
+        this.addConstraint(this.controlHeightConstraint);
+        this.addConstraints(Constraint.fromVFL(
+            [
+                "[label(200)]-(>=50%)-|",
+                "V:|-[label(label.width)]",
+
+                "|-(>=50%)-[textContent(400),fontFamily(textContent),textColor(textContent),lineBreak(textContent),alignment(textContent),verticalAlignment(textContent),style(textContent),sizeIndicator(textContent)]",
+                "V:|-[textContent]-[fontFamily(textContent)]-[textColor(textContent)]-[lineBreak(textContent)]-[alignment(textContent)]-[verticalAlignment(textContent)]-[style(textContent)]-[sizeIndicator(textContent)]",
+
+                "[label]-(16)-[textContent]"
+            ],
+            {
+                label: this.label,
+
+                textContent: this.textContent,
+                fontFamily: this.fontFamily,
+                textColor: this.textColor,
+                lineBreak: this.lineBreak,
+                alignment: this.alignment,
+                verticalAlignment: this.verticalAlignment,
+                style: this.style,
+                sizeIndicator: this.sizeIndicator
+            }
+        ))
     }
 
     public updateText() {
@@ -160,25 +193,15 @@ export class LabelDemo extends Demo {
         super.appearanceChanged(appearance);
 
         this.sizeIndicator.textColor = appearance.primaryColor;
+
+        this.controlHeightConstraint.constant = appearance.controlSize;
+        this.applyConstraints();
     }
 
     public layout(): void {
         super.layout();
 
-        // Center the label
-        this.label.center = new Point(this.rect.width / 2 - this.label.rect.width - this.appearance.spacing, this.label.rect.height / 2 + this.appearance.spacing);
 
-        // Layout the controls
-        let controls: View[] = [ this.textContent, this.fontFamily, this.textColor, this.lineBreak, this.alignment, this.verticalAlignment, this.style, this.sizeIndicator ];
-        let yShift = this.appearance.spacing;
-        for (let control of controls) {
-            control.rect = new Rect(
-                this.rect.width / 2 + this.appearance.spacing, yShift,
-                400, this.appearance.controlSize
-            );
-
-            yShift += control.rect.height + this.appearance.spacing;
-        }
     }
 }
 

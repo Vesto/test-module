@@ -1,4 +1,4 @@
-import { View, Size, Point, Color, SegmentedControl, SegmentItem, Button, Appearance, PropertyAnimation, GroupAnimation, SequenceAnimation, Rect, Shadow, Logger } from "quark";
+import { View, Size, Point, Color, SegmentedControl, SegmentItem, Button, Appearance, PropertyAnimation, GroupAnimation, SequenceAnimation, Rect, Shadow, Constraint } from "quark";
 import { Demo } from "./Demo";
 
 export class AnimationDemo extends Demo {
@@ -7,6 +7,8 @@ export class AnimationDemo extends Demo {
     public resetButton: Button;
 
     public viewSize: number = 150;
+
+    public controlHeightConstraint: Constraint;
 
     public constructor() {
         super();
@@ -18,7 +20,6 @@ export class AnimationDemo extends Demo {
 
         // Controls
         this.animationSelector = new SegmentedControl();
-        this.animationSelector.rect.size = new Size(600, 0);
         this.animationSelector.isMomentary = true;
         this.animationSelector.appendSegments(
             new SegmentItem(true, "Alpha", 1),
@@ -36,27 +37,43 @@ export class AnimationDemo extends Demo {
         this.addSubview(this.animationSelector);
 
         this.resetButton = new Button();
-        this.resetButton.rect.size = new Size(this.viewSize, 0);
         this.resetButton.title = "Reset View";
         this.resetButton.onButtonUp = () => { this.resetAnimatingView(); };
         this.addSubview(this.resetButton);
+
+        // Add constraints
+        this.useAutoLayout = true;
+        this.controlHeightConstraint = new Constraint(
+            this.animationSelector, Constraint.Attribute.Height, Constraint.Relation.Equal,
+            undefined, Constraint.Attribute.Constant,
+            1, 0, 1
+        );
+        this.addConstraint(this.controlHeightConstraint);
+        this.addConstraints(Constraint.fromVFL(
+            [
+                "V:|-[selector]-[reset(selector)]",
+                "|-[selector(600),reset(selector)]"
+            ],
+            {
+                selector: this.animationSelector,
+                reset: this.resetButton
+            }
+        ))
     }
 
 
     public appearanceChanged(appearance: Appearance): void {
         super.appearanceChanged(appearance);
 
-        this.animationSelector.rect.size = new Size(this.animationSelector.rect.size.width, appearance.controlSize);
-        this.resetButton.rect.size = new Size(this.animationSelector.rect.size.width, appearance.controlSize);
-        this.layout();
+        // Update the height constraint for controls
+        this.controlHeightConstraint.constant = this.appearance.controlSize;
+        this.applyConstraints();
     }
 
     public layout(): void {
         super.layout();
 
         this.animatingView.center = this.rect.bounds.center;
-        this.animationSelector.rect.point = new Point(this.appearance.spacing, this.appearance.spacing);
-        this.resetButton.rect.point = new Point(this.appearance.spacing, this.animationSelector.rect.y + this.animationSelector.rect.height + this.appearance.spacing)
     }
 
     public animateForIndex(index: number) {
