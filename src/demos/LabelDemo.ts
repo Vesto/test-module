@@ -168,7 +168,7 @@ export class LabelDemo extends Demo {
                 style: this.style,
                 sizeIndicator: this.sizeIndicator
             }
-        ))
+        ));
     }
 
     public updateText() {
